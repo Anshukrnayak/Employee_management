@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+
+ <!-- Main Content -->
+ <main class="mt-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="bg-white shadow-lg rounded-lg p-6">
+
+        <!-- Confirmation Message -->
+        <h2 class="text-3xl font-semibold text-gray-800">Are you sure you want to delete {{ customer.first_name }} {{ customer.last_name }}?</h2>
+        <p class="mt-4 text-lg text-gray-600">This action is irreversible. Once deleted, the customer data will be permanently removed.</p>
+
+        <!-- Form to confirm deletion -->
+        <form method="POST" class="mt-6">
+          {% csrf_token %}
+          <div class="flex space-x-4">
+            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-700">
+              Yes, Delete
+            </button>
+            <a href="{% url 'leads'  %}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400">
+              No, Cancel
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </main>
+
+
+
+{% endblock %}
