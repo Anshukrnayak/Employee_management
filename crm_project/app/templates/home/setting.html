@@ -1,0 +1,135 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+<main class="bg-gray-100 font-sans">
+
+  <!-- Page Container -->
+  <div class="min-h-screen flex items-center justify-center py-10 px-5">
+    <div class="bg-white w-full max-w-4xl rounded-lg shadow-lg p-8">
+      <!-- Page Header -->
+      <div class="border-b pb-4 mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Settings</h1>
+        <p class="text-sm text-gray-500">Manage your account, notifications, and preferences.</p>
+      </div>
+
+      <!-- Account Settings Section -->
+      <div class="mb-10">
+
+        {% if is_lead %}
+
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Profile</h2>
+        <div class="min-h-screen flex items-center justify-center py-10 px-5">
+            <div class="bg-white shadow-md rounded-lg w-full max-w-3xl p-8">
+              
+              <!-- Header -->
+              <div class="flex items-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <img src="{{lead.image.url}}" alt="Client Avatar" class="w-full h-full object-cover">
+                </div>
+                <div class="ml-4">
+                  <h1 class="text-2xl font-bold text-gray-800"> {{client.name}} </h1>
+                  <p class="text-sm text-gray-500">Client ID: {{client.id}} </p>
+                </div>
+              </div>
+        
+              <!-- Contact Information -->
+              <div class="mb-6">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Contact Information</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                 
+                 
+                    <div>
+                    <p class="text-sm font-medium text-gray-500">Email</p>
+                    <p class="text-gray-800"> {{lead.email}} </p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Phone</p>
+                    <p class="text-gray-800"> {{lead.contact}} </p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Company</p>
+                    <p class="text-gray-800">Acme Corp.</p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Address</p>
+                    <p class="text-gray-800"> {{lead.location}} </p>
+                  </div>
+
+                  <p> Professinal details </p>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Designation</p>
+                    <p class="text-gray-800"> {{lead.designation}} </p>
+                  </div>
+                  
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Salary</p>
+                    <p class="text-gray-800"> {{lead.salary}} years </p>
+                  </div>
+
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Experience</p>
+                    <p class="text-gray-800"> {{lead.experience}} </p>
+                  </div>
+
+                </div>
+              </div>
+    
+              <!-- Actions -->
+              <div class="flex justify-end space-x-3">
+                <a href="" 
+                  class="py-2 px-4 bg-gray-200 text-gray-700 rounded-lg shadow-md hover:bg-gray-300">
+                  Edit Profile
+              </a>
+                <a href=""
+                  class="py-2 px-4 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700">
+                  Delete Client
+                </a>
+              </div>
+              
+            </div>
+          </div>
+
+        {% else %}
+
+
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Add new lead</h2>
+
+        <form class="space-y-6" method="post" enctype="multipart/form-data" >
+            {% csrf_token %}
+            {{form.as_p}}
+          <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700">Save Changes</button>
+        </form>
+
+
+        {% endif %}
+
+      </div>
+
+      <!-- Notification Settings Section -->
+      <div class="mb-10">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Notification Settings</h2>
+        <form class="space-y-4">
+          <div class="flex items-center">
+            <input type="checkbox" id="email_notifications" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            <label for="email_notifications" class="ml-3 text-sm text-gray-700">Email Notifications</label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="sms_notifications" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            <label for="sms_notifications" class="ml-3 text-sm text-gray-700">SMS Notifications</label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="push_notifications" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+            <label for="push_notifications" class="ml-3 text-sm text-gray-700">Push Notifications</label>
+          </div>
+          <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white rounded-md shadow-md hover:bg-indigo-700">Update Notifications</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+
+{% endblock %}

@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Navbar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100  font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-black shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="text-xl font-bold text-gray-100">
+        <a href="#" class="hover:text-indigo-600">CRM</a>
+      </div>
+
+      <!-- Navigation Links (Desktop) -->
+      {% if request.user.is_authenticated  %}
+      <div class="hidden md:flex space-x-6">
+        <a href="{% url 'home' %}" class="text-gray-600 hover:text-indigo-600">Home</a>
+        <a href="{% url 'clients' %}" class="text-gray-600 hover:text-indigo-600">Clients</a>
+        <a href="#" class="text-gray-600 hover:text-indigo-600">Reports</a>
+        <a href="{% url 'setting' %}" class="text-gray-600 hover:text-indigo-600">Settings</a>
+      </div>
+      <a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-200 hover:bg-black">Logout</a>
+      {% else %}
+      <div class="hidden md:flex space-x-6">
+        <a href="{% url 'signup' %}" class="block px-4 py-2 text-gray-200 hover:bg-black">Signup</a>
+        <a href="{% url 'login' %}" class="block px-4 py-2 text-gray-200 hover:bg-black">Login</a>
+    
+      </div>
+       
+      {% endif %}
+       
+        </div>
+      </div>
+
+      <!-- Hamburger Menu (Mobile) -->
+      <div class="md:hidden flex items-center">
+        <button id="menu-toggle" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden">
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Home</a>
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Leads</a>
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Clients</a>
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Reports</a>
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Settings</a>
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Profile</a>
+      <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Logout</a>
+    </div>
+  </nav>
+
+  <!-- Content Placeholder -->
+
+  {% block content %}
+
+  {% endblock %}
+
+  <!-- JavaScript for Mobile Menu -->
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+
+<footer class="bg-gray-800 text-gray-300 py-8">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2025 CRM Application. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
