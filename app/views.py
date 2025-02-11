@@ -4,6 +4,7 @@ from app.models import LeadModel,AgentModel
 from app.forms import LeadForm
 from django.contrib.auth.models import User
 
+from django.contrib.auth import user_logged_in  
 from django.contrib import messages
 
 # home of the application 
