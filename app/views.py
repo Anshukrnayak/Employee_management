@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import generic,View
 from app.models import LeadModel,AgentModel
-from app.forms import LeadForm
+from app.forms import LeadForm,AgentForm
 from django.contrib.auth.models import User
 
 from django.contrib.auth import user_logged_in  
@@ -10,18 +10,34 @@ from django.contrib import messages
 # home of the application 
 def homePage(request):return render(request,'Home/index.html')
 
+class AgentView(View):
+    def get(self,request):
+        form=AgentForm
+        return render(request,'home/agent.html',{'form':form})
+
+    def post(self,request):
+        form=AgentForm(request.POST,request.FILES)
+        if form.is_valid():
+            agent=form.save(commit=False)
+            agent.name=request.user
+            agent.save()
+
+            print('user is saved ')
+
+            return redirect('home')
+
+        return render(request,'home/agent.html',{'form':form})
+
 
 # List of leads 
 class ListLeads(generic.ListView):
     template_name='Home/home.html'
     model=LeadModel
     fields='__all__'
+    context_object_name = 'lead_list'
 
+# add agent :
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["lead_list"] = LeadModel.objects.all() 
-        return context
     
 # Agent profile 
 class AgentProfile(View):    
@@ -30,7 +46,7 @@ class AgentProfile(View):
             if User.is_authenticated:
                 agent=AgentModel.objects.get(name=request.user)
                 return render(request,'Home/agent_profile.html',{'agent':agent})
-        except:
+        except AgentModel.DoestNotExist:
             agent={}
             return render(request,'Home/agent_profile.html',{'agent':agent})
 
@@ -59,35 +75,27 @@ class LeadProfile(View):
         lead_profile=LeadModel.objects.get(id=pk)
         return render(request,'Home/lead_profile.html',{'lead':lead_profile})
 
-
-        
 class UpdateLead(View):
-    def get(self,request,*args,**kwargs):
-        
-        lead=LeadModel.objects.get(id=kwargs['pk'])
-        form=LeadForm(instance=lead)
-        print(kwargs['pk'])
-        return render(request,'Home/add_leads.html',{'form':form})
+        def get(self, request, *args, **kwargs):
+                lead = LeadModel.objects.select_related('agent').get(id=kwargs['pk'])
+                form = LeadForm(instance=lead)
+                return render(request, 'Home/add_leads.html', {'form': form})
 
-        
+        def post(self, request, *args, **kwargs):
+            try:
+                lead = LeadModel.objects.select_related('agent').get(id=kwargs['pk'])
+                form = LeadForm(request.POST, request.FILES, instance=lead)
 
-    def post(self,request,*args,**kwargs):
+                if form.is_valid():
+                    obj = form.save(commit=False)
+                    obj.agent = request.user
+                    obj.save()
+                    return redirect('leads')
 
-        try:
-            lead=LeadModel.objects.get(id=kwargs['pk'])
-            form=LeadForm(request.POST,request.FILES,instance=lead)
+                return render(request, 'Home/add_leads.html', {'form': form})
 
-            if form.is_valid():
-                obj=form.save(commit=False)
-                obj.agent=self.request.user
-                obj.save() 
-                print('user update successfully....')
+            except LeadModel.DoesNotExist:
                 return redirect('leads')
-            
-            print('invalid form ')
-            return render(request,'Home/add_leads.html',{'form':form})
-
-        except: return redirect('leads')
 
 
 class DeletePage(generic.DeleteView):

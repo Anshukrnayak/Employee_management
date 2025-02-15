@@ -49,7 +49,7 @@ class SignupPage(View):
           
             messages.info(request,'You account created successfully...')
     
-            return redirect('home')
+            return redirect('agent_profile')
         
         return render(request,'account/signup.html',{'form':form})
 

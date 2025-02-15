@@ -16,6 +16,9 @@ class AgentModel(models.Model):
 
     def __str__(self): return  self.name.username
 
+
+
+
 class LeadModel(models.Model):
 
     agent=models.ForeignKey(User,on_delete=models.CASCADE,related_name='lead')
