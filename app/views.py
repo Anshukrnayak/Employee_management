@@ -64,6 +64,41 @@ class LeadsView(LoginRequiredMixin,generic.ListView):
     model = LeadModel
     context_object_name = 'leads'
 
+class LeadUpdateView(LoginRequiredMixin,generic.View):
+
+
+    def get(self,request,*args,**kwargs):
+        try:
+            instance=LeadModel.objects.get(id=kwargs['pk'])
+        except LeadModel.DoesNotExist:
+            return redirect('home')
+        form=LeadForm(instance=instance)
+        return render(request,'home/create_client.html',{'form':form})
+
+    def post(self,request,*args,**kwargs):
+        try:
+            instance=LeadModel.objects.get(id=kwargs['pk'])
+        except LeadModel.DoesNotExist:
+            return redirect('home')
+        form=LeadForm(data=request.POST,instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request,'home/create_client.html',{'form':form})
+
+class DeleteLeadView(LoginRequiredMixin,generic.DeleteView):
+    template_name = 'home/delete.html'
+    model = LeadModel
+    success_url = reverse_lazy('home')
+
+
+class LeadView(LoginRequiredMixin,generic.DetailView):
+    template_name = 'home/profile.html'
+    model = LeadModel
+    context_object_name = 'profile'
+
+
+# Profile view :
 class DisplayLeadProfile(LoginRequiredMixin,generic.View):
     def get(self,request):
         profile=LeadModel.objects.get(user=request.user)
@@ -73,8 +108,8 @@ class CreateLeadProfile(LoginRequiredMixin,generic.View):
     def post(self,request):
         form=LeadForm(request.POST,request.FILES)
         if form.is_valid():
-            lead=form.save()
-            lead.user=self.request.user
+            lead=form.save(commit=False)
+            lead.user=request.user
             lead.save()
             return redirect('home')
         return render(request,'home/create_client.html',{'form':form})

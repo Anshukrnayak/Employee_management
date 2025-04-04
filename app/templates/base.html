@@ -13,10 +13,21 @@
         <h2 class="text-2xl font-bold">CRM</h2>
         <nav>
             <ul class="flex space-x-6">
+
+                {% if request.user.is_authenticated %}
+
                 <li><a href="{% url 'home' %}" class="hover:text-gray-300">Dashboard</a></li>
                 <li><a href="{% url 'leads' %}" class="hover:text-gray-300">Leads</a></li>
                 <li><a href="{% url 'profile' %}" class="hover:text-gray-300">Profile</a></li>
                 <li><a href="{% url 'create_client' %}" class="hover:text-gray-300">Add Client</a></li>
+                <li><a href="{% url 'logout' %}" class="hover:text-gray-300">Logout</a></li>
+
+                {% else %}
+
+                <li><a href="{% url 'login' %}" class="hover:text-gray-300">Login</a></li>
+                <li><a href="{% url 'register' %}" class="hover:text-gray-300">Signup</a></li>
+
+                {% endif %}
 
             </ul>
         </nav>

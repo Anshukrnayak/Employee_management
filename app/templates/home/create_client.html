@@ -7,7 +7,7 @@
 {% block content %}
 <div class="bg-white p-6 shadow-md rounded-lg max-w-lg mx-auto">
     <h2 class="text-2xl font-semibold mb-4">Add a New Client</h2>
-    <form method="post" class="space-y-4">
+    <form method="post" class="space-y-4" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{form.as_p}}

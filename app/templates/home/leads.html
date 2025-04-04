@@ -22,9 +22,9 @@
                     <td class="p-3 border">{{ lead.location }}</td>
                     <td class="p-3 border">{{ lead.clients.count }}</td>
                     <td class="p-3 border flex space-x-2">
-                        <a href="" class="text-blue-500 hover:underline">View</a>
-                        <a href="" class="text-yellow-500 hover:underline">Edit</a>
-                        <a href="" class="text-red-500 hover:underline">Delete</a>
+                        <a href="{% url 'lead_view' lead.id  %}" class="text-blue-500 hover:underline">View</a>
+                        <a href="{% url 'update_lead' lead.id %}" class="text-yellow-500 hover:underline">Edit</a>
+                        <a href="{% url 'delete_lead' lead.id  %}" class="text-red-500 hover:underline">Delete</a>
                     </td>
                 </tr>
             {% empty %}
