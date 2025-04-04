@@ -1,108 +1,100 @@
 from django.shortcuts import render,redirect
-from django.views import generic,View
-from app.models import LeadModel,AgentModel
-from app.forms import LeadForm,AgentForm
-from django.contrib.auth.models import User
-from django.contrib.auth import user_logged_in  
-from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views import generic
+from .models import ClientModel,LeadModel
+from .forms import LeadForm,ClientForm
 
-# home of the application 
-def homePage(request):return render(request,'Home/index.html')
+class ClientView(LoginRequiredMixin,generic.ListView):
+    model = ClientModel
+    template_name = 'home/index.html'
+    context_object_name = 'clients'
 
-class AgentView(View):
+
+class ClientCreate(LoginRequiredMixin,generic.View):
     def get(self,request):
-        form=AgentForm
-        return render(request,'home/agent.html',{'form':form})
+        form=ClientForm()
+        return render(request,'home/create_client.html',{'form':form})
 
     def post(self,request):
-        form=AgentForm(request.POST,request.FILES)
+        form=ClientForm(data=request.POST)
         if form.is_valid():
-            agent=form.save(commit=False)
-            agent.name=request.user
-            agent.save()
-
-            print('user is saved ')
+            client=form.save(commit=False)
+            client.lead=LeadModel.objects.get(user=request.user)
+            client.save()
 
             return redirect('home')
+        return render(request,'home/create_client.html',{'form':form})
 
-        return render(request,'home/agent.html',{'form':form})
 
-
-# List of leads 
-class ListLeads(generic.ListView):
-    template_name='Home/home.html'
-    model=LeadModel
-    fields='__all__'
-    context_object_name = 'lead_list'
-
-# add agent :
-
-    
-# Agent profile 
-class AgentProfile(View):    
+class ClientUpdateView(LoginRequiredMixin,generic.View):
     def get(self,request,*args,**kwargs):
         try:
-            if User.is_authenticated:
-                agent=AgentModel.objects.get(name=request.user)
-                return render(request,'Home/agent_profile.html',{'agent':agent})
-        except AgentModel.DoestNotExist:
-            agent={}
-            return render(request,'Home/agent_profile.html',{'agent':agent})
-
-class AddLeads(View):
-    
-    def get(self,request,*args,**kwargs):
-        form=LeadForm
-        return render(request,'Home/add_leads.html',{'form':form})
-    
-    def post(self,request):
-        form=LeadForm(request.POST,request.FILES)
-
-        if form.is_valid():
-            obj=form.save(commit=False)
-            obj.agent=self.request.user
-            obj.save()
+            instance=ClientModel.objects.get(id=kwargs['pk'])
+            form=ClientForm(instance=instance)
+        except ClientModel.DoesNotExist():
             return redirect('home')
 
-        messages.info(request,'Invalid form data please enter correct format data : ')
-        return render(request,'Home/add_leads.html',{'form':form})
+        return render(request,'home/create_client.html',{'form':form})
 
-class LeadProfile(View):
-    def get(self,request,*args,**kwargs):
-        pk=kwargs['pk']
-        
-        lead_profile=LeadModel.objects.get(id=pk)
-        return render(request,'Home/lead_profile.html',{'lead':lead_profile})
+    def post(self,request,*args,**kwargs):
+        try:
+            instance=ClientModel.objects.get(id=kwargs['pk'])
+        except ClientModel.DoesNotExist():
+            return render('home')
 
-class UpdateLead(View):
-        def get(self, request, *args, **kwargs):
-                lead = LeadModel.objects.select_related('agent').get(id=kwargs['pk'])
-                form = LeadForm(instance=lead)
-                return render(request, 'Home/add_leads.html', {'form': form})
-
-        def post(self, request, *args, **kwargs):
-            try:
-                lead = LeadModel.objects.select_related('agent').get(id=kwargs['pk'])
-                form = LeadForm(request.POST, request.FILES, instance=lead)
-
-                if form.is_valid():
-                    obj = form.save(commit=False)
-                    obj.agent = request.user
-                    obj.save()
-                    return redirect('leads')
-
-                return render(request, 'Home/add_leads.html', {'form': form})
-
-            except LeadModel.DoesNotExist:
-                return redirect('leads')
+        form=ClientForm(instance=instance,data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request,'home/create_client.html',{'form':form})
 
 
-class DeletePage(generic.DeleteView):
-    model=LeadModel
-    template_name='Home/delete_lead.html'
+class ClientDeleteView(LoginRequiredMixin,generic.DeleteView):
+    model = ClientModel
+    template_name = 'home/delete.html'
 
-    def post(self,request,pk):
-        LeadModel.objects.get(id=pk).delete()
-        return redirect('leads')
+    success_url = reverse_lazy('home')
 
-    
+
+# Logic for Lead profile
+
+class LeadsView(LoginRequiredMixin,generic.ListView):
+    template_name = 'home/leads.html'
+    model = LeadModel
+    context_object_name = 'leads'
+
+class DisplayLeadProfile(LoginRequiredMixin,generic.View):
+    def get(self,request):
+        profile=LeadModel.objects.get(user=request.user)
+        return render(request,'home/profile.html',{'profile':profile})
+
+class CreateLeadProfile(LoginRequiredMixin,generic.View):
+    def post(self,request):
+        form=LeadForm(request.POST,request.FILES)
+        if form.is_valid():
+            lead=form.save()
+            lead.user=self.request.user
+            lead.save()
+            return redirect('home')
+        return render(request,'home/create_client.html',{'form':form})
+
+    def get(self,request):
+        form=LeadForm()
+        return render(request,'home/create_client.html',{'form':form})
+
+class UpdateLeadProfile(LoginRequiredMixin,generic.UpdateView):
+    template_name = 'home/create_client.html'
+    form_class = LeadForm
+    model = LeadModel
+    success_url = reverse_lazy('home')
+
+
+class DeleteLeadProfile(LoginRequiredMixin,generic.DeleteView):
+    form_class = LeadForm
+    model = LeadModel
+    success_url = reverse_lazy('home')
+
+
+
+

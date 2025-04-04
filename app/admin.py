@@ -1,6 +1,7 @@
 from django.contrib import admin
-from app.models import AgentModel,LeadModel
+from .models import LeadModel,ClientModel
 
-admin.site.register(AgentModel)
 admin.site.register(LeadModel)
+admin.site.register(ClientModel)
+
 

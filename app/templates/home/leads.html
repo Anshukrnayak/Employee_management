@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Leads List{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-lg mt-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Leads</h2>
+
+    <table class="w-full border-collapse border border-gray-300">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="p-3 border">Name</th>
+                <th class="p-3 border">Location</th>
+                <th class="p-3 border">Clients</th>
+                <th class="p-3 border">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leads %}
+                <tr class="hover:bg-gray-100">
+                    <td class="p-3 border">{{ lead.first_name }} {{ lead.last_name }}</td>
+                    <td class="p-3 border">{{ lead.location }}</td>
+                    <td class="p-3 border">{{ lead.clients.count }}</td>
+                    <td class="p-3 border flex space-x-2">
+                        <a href="" class="text-blue-500 hover:underline">View</a>
+                        <a href="" class="text-yellow-500 hover:underline">Edit</a>
+                        <a href="" class="text-red-500 hover:underline">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="p-3 text-gray-600 text-center">No leads available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

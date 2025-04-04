@@ -1,17 +1,20 @@
 
 from django.urls import path
-from app import views
+from . import  views
 
-urlpatterns = [
+urlpatterns=[
 
-    path('',views.homePage,name='home'),
-    path('leads/',views.ListLeads.as_view(),name='leads'),
-    path('agent/',views.AgentProfile.as_view(),name='agent'),
-    path('add_leads/',views.AddLeads.as_view(),name='add_leads'),
-    path('leads_profile/<int:pk>/',views.LeadProfile.as_view(),name='lead_profile'),
-    path('update_lead/<int:pk>',views.UpdateLead.as_view(),name='update_lead'),
-    path('delete_lead/<int:pk>',views.DeletePage.as_view(),name='delete_lead'),
-    path('agent_profile/',views.AgentView.as_view(),name='agent_profile'),
+    path('',views.ClientView.as_view(),name='home'),
+    path('create-client/',views.ClientCreate.as_view(),name='create_client'),
+    path('update_client/<int:pk>/',views.ClientUpdateView.as_view(),name='update_client'),
+    path('delete_client/<int:pk>/',views.ClientDeleteView.as_view(),name='delete_client'),
+
+    # Leads
+    path('leads/',views.LeadsView.as_view(),name='leads'),
+    path('profile/',views.DisplayLeadProfile.as_view(),name='profile'),
+    path('update-profile/<int:pk>/',views.UpdateLeadProfile.as_view(),name='edit_profile'),
+    path('delete-profile/<int:pk>/',views.DeleteLeadProfile.as_view(),name='delete_profile'),
 
 
 ]
+

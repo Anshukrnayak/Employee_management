@@ -1,119 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beautiful Home Page</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CRM Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100">
 
-    <nav class="bg-black shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-          <!-- Logo -->
-          <a href="#" class="text-2xl font-bold text-blue-600">
-            C-Relation-M
-          </a>
-    
-          <!-- Links -->
-          {% if request.user.is_authenticated %}
-          <div class="hidden md:flex space-x-6">
-          
-            <a href="{% url 'home' %}" class="text-white  hover:text-blue-600 transition">Home</a>
-            <a href="{% url 'leads' %}" class="text-gray-200 hover:text-blue-600 transition">Leads</a>
-            <a href="#about" class="text-gray-200 hover:text-blue-600 transition">My Leads</a>
-            <a href="{% url 'agent' %}" class="text-gray-200 hover:text-blue-600 transition">Profile</a>
-            
+    <!-- Navbar -->
+    <header class="bg-gray-800 text-white shadow-md p-4 flex justify-between items-center">
+        <h2 class="text-2xl font-bold">CRM</h2>
+        <nav>
+            <ul class="flex space-x-6">
+                <li><a href="{% url 'home' %}" class="hover:text-gray-300">Dashboard</a></li>
+                <li><a href="{% url 'leads' %}" class="hover:text-gray-300">Leads</a></li>
+                <li><a href="{% url 'profile' %}" class="hover:text-gray-300">Profile</a></li>
+                <li><a href="{% url 'create_client' %}" class="hover:text-gray-300">Add Client</a></li>
 
-          </div>
-          
-          <div class="hidden md:flex space-x-4">
-            <a href="{% url 'logout'  %}" class="px-4 py-2 border rounded-md text-gray-600 hover:text-white hover:bg-blue-600 transition">
-              Logout
-            </a>
-     
-          </div>
-
-          {% else %}
-          
-          <div class="hidden md:flex space-x-4">
-            <a href="{% url 'login'  %}" class="px-4 py-2 border rounded-md text-gray-600 hover:text-white hover:bg-blue-600 transition">
-              Login
-            </a>
-            <a href="{% url 'signup' %}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-              Sign Up
-            </a>
-          </div>
-    
-          {% endif %}
-
-          <!-- Mobile Menu Button -->
-          <button id="menu-btn" class="md:hidden focus:outline-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
-        </div>
-    
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-          <a href="#" class="block px-4 py-2 text-gray-600 hover:text-blue-600 transition">Home</a>
-          <a href="#about" class="block px-4 py-2 text-gray-600 hover:text-blue-600 transition">About</a>
-          <a href="#services" class="block px-4 py-2 text-gray-600 hover:text-blue-600 transition">Services</a>
-          <a href="#contact" class="block px-4 py-2 text-gray-600 hover:text-blue-600 transition">Contact</a>
-          <a href="#login" class="block px-4 py-2 text-gray-600 hover:text-blue-600 transition">Login</a>
-          <a href="#signup" class="block px-4 py-2 bg-blue-600 text-white text-center hover:bg-blue-700 transition">Sign Up</a>
-        </div>
-      </nav>
-    
-   
-      {% block content  %} {% endblock %}
-
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-gray-400">
-    <div class="container mx-auto px-4 py-10">
-      <div class="grid md:grid-cols-3 gap-8">
-        <!-- About Section -->
+            </ul>
+        </nav>
         <div>
-          <h3 class="font-bold text-lg text-white mb-4">About Us</h3>
-          <p>Your one-stop solution for all things web. We create, innovate, and transform ideas into reality.</p>
+            <span class="text-gray-300">Welcome, User</span>
         </div>
-        <!-- Links Section -->
-        <div>
-          <h3 class="font-bold text-lg text-white mb-4">Quick Links</h3>
-          <ul>
-            <li><a href="#" class="hover:text-white">Home</a></li>
-            <li><a href="#features" class="hover:text-white">Features</a></li>
-            <li><a href="#cta" class="hover:text-white">Pricing</a></li>
-            <li><a href="#contact" class="hover:text-white">Contact</a></li>
-          </ul>
-        </div>
-        <!-- Contact Section -->
-        <div>
-          <h3 class="font-bold text-lg text-white mb-4">Contact Us</h3>
-          <p>Email: contact@website.com</p>
-          <p>Phone: +123 456 7890</p>
-          <p>Address: 123 Web Street, Design City</p>
-        </div>
-      </div>
-      <div class="mt-8 text-center text-sm">
-        &copy; 2024 Your Company. All Rights Reserved.
-      </div>
-    </div>
-  </footer>
+    </header>
 
-    <!-- JavaScript for Mobile Menu -->
-    <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-    
-        menuBtn.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-        });
-
-    </script>
-    
+    <!-- Content -->
+    <main class="p-6">
+        {% block content %}
+        <p>Welcome to the CRM dashboard.</p>
+        {% endblock %}
+    </main>
 
 </body>
 </html>

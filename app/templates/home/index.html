@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Clients - CRM{% endblock %}
+
+{% block header %}Clients{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 shadow-md rounded-lg">
+    <h2 class="text-2xl font-semibold mb-4">Clients List</h2>
+    <table class="w-full border-collapse border border-gray-300">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="border border-gray-300 p-2"> Client_ID </th>
+                <th class="border border-gray-300 p-2">First Name</th>
+                <th class="border border-gray-300 p-2">Last Name</th>
+                <th class="border border-gray-300 p-2">Email</th>
+                <th class="border border-gray-300 p-2">Contact</th>
+                <th class="border border-gray-300 p-2">Status</th>
+                <th class="border border-gray-300 p-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr class="text-center">
+                <td class="border border-gray-300 p-2">{{ client.id }}</td>
+                <td class="border border-gray-300 p-2">{{ client.first_name }}</td>
+                <td class="border border-gray-300 p-2">{{ client.last_name }}</td>
+                <td class="border border-gray-300 p-2">{{ client.email }}</td>
+                <td class="border border-gray-300 p-2">{{ client.contact }}</td>
+                <td class="border border-gray-300 p-2">{{ client.status }}</td>
+                <td class="border border-gray-300 p-2">
+                    <a href="{% url 'update_client' client.id %}" class="text-blue-500 hover:underline">Edit</a> |
+                    <a href="{% url 'delete_client' client.id %}" class="text-red-500 hover:underline">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="border border-gray-300 p-4 text-center text-gray-500">No clients found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - {{ user.first_name }} {{ user.last_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mt-6">
+    <div class="flex items-center space-x-6">
+        <img src="{{ user.lead.profile_pic.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover border-4 border-gray-300">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">{{ profile.first_name }} {{ profile.last_name }}</h2>
+            <p class="text-gray-600">{{ profile.email }}</p>
+        </div>
+    </div>
+
+    <div class="mt-6 border-t pt-4">
+        <h3 class="text-lg font-semibold text-gray-700">Location</h3>
+        <p class="text-gray-600">{{ profile.location }}</p>
+    </div>
+
+    <div class="mt-4">
+        <h3 class="text-lg font-semibold text-gray-700">About</h3>
+        <p class="text-gray-600">{{ profile.about }}</p>
+    </div>
+
+    <div class="mt-6">
+        <a href="{% url 'edit_profile' profile.id %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Edit Profile</a>
+    </div>
+</div>
+{% endblock %}
