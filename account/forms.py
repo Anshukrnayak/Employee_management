@@ -16,6 +16,8 @@ class SignupForm(UserCreationForm):
             })
 
 class LoginForm(forms.Form):
+    remember_me = forms.BooleanField(required=False, initial=False)
+
     username = forms.CharField(
         label='Username',
         max_length=150,
@@ -32,3 +34,9 @@ class LoginForm(forms.Form):
             'placeholder': 'Enter your password'
         })
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes or other styling
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
