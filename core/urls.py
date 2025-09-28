@@ -5,11 +5,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.account.urls')),
-    path('', include('apps.leads.urls')),
-    path('', include('apps.clients.urls')),
-    path('subscription/', include('apps.subscription.urls')),
-    path('api/', include('apps.api.urls')),
+    path('', include('account.urls')),
+    path('', include('app.urls')),
+    path('api/', include('api.urls')),
 ]
 
 # Health check endpoint

@@ -35,10 +35,9 @@ INSTALLED_APPS = [
     'storages',  # For S3 storage (optional)
 
     # Local apps
-    'apps.account',
-    'apps.subscription',
-    'apps.leads',
-    'apps.clients',
+    'app',
+    'account',
+    'api'
 ]
 
 MIDDLEWARE = [
